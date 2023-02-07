@@ -169,7 +169,8 @@ class LinkedList:
         else:
             return 'The list is empty'
 
-    def m_n(self, m, n):
+    def m_n_value_swap(self, m, n):
+        '''Swaps two values in the list'''
         if m == n:
             return
         elif self.count >= 1:
@@ -200,6 +201,29 @@ class LinkedList:
         else:
             print('The list is empty')
 
+    def m_n_reversal(self, m, n):
+        '''Reverse items between indices m and n'''
+        if self.count > 2 and n <= self.count and m >= 0:
+            current = self.head
+            list = []
+            diff = n - m
+            for index in range(0, m):
+                current = current.next
+            for index in range(m, n):
+                list.append(current.value)
+                current = current.next
+            list.append(current.value)
+            print(list, current.value)
+
+            for index in range(0, diff + 1):
+                current.value = list[index]
+                current = current.prev
+
+        elif 1 >= self.count <= 2:
+            return
+        elif self.count == 0:
+            print('The list is empty')
+
 
 __name__ = "__main__"
 
@@ -214,5 +238,5 @@ list.insert_at(6, 2)
 list.insert_at(10, 0)
 list.print()
 print()
-list.m_n(6, 3)
+list.m_n_reversal(5, 6)
 list.print()
