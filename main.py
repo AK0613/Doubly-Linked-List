@@ -213,7 +213,6 @@ class LinkedList:
                 list.append(current.value)
                 current = current.next
             list.append(current.value)
-            print(list, current.value)
 
             for index in range(0, diff + 1):
                 current.value = list[index]
@@ -238,5 +237,5 @@ list.insert_at(6, 2)
 list.insert_at(10, 0)
 list.print()
 print()
-list.m_n_reversal(5, 6)
+list.m_n_reversal(0, 6)
 list.print()
