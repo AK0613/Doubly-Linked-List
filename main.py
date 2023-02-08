@@ -218,7 +218,7 @@ class LinkedList:
                 current.value = list[index]
                 current = current.prev
 
-        elif 1 >= self.count <= 2:
+        elif 1 <= self.count <= 2:
             return
         elif self.count == 0:
             print('The list is empty')
@@ -228,13 +228,13 @@ __name__ = "__main__"
 
 # Testing values
 list = LinkedList()
+list.insert_back(1)
+list.insert_back(2)
 list.insert_back(3)
+list.insert_back(4)
 list.insert_back(5)
-list.insert_front(8)
+list.insert_back(6)
 list.insert_back(7)
-list.insert_at(9, 1)
-list.insert_at(6, 2)
-list.insert_at(10, 0)
 list.print()
 print()
 list.m_n_reversal(0, 6)
