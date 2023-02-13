@@ -1,15 +1,17 @@
 # Given a linked list and numbers m and n, return it back with only positions m to n in reverse
 # Implementing a doubly linked list
 class Node:
-    def __init__(self, value=None):
+    def __init__(self, value=None, child=None):
         self.value = value
         self.next = None
         self.prev = None
+        self.child = None
 
 
 class LinkedList:
     def __init__(self):
         self.head = None
+        self.tail = None
         self.count = 0
 
     def print(self):
@@ -17,19 +19,25 @@ class LinkedList:
         current = self.head
         while current:
             print(current.value)
+            # if current.child is not None:
+            #     next = current.child.head
+            #     while next:
+            #         print(next.value)
+            #         next = next.next
+
             current = current.next
 
     def insert_back(self, data):
         '''Inserts elements at the end of the linked list'''
         newNode = Node(data)
         if self.head:
-            current = self.head
-            while current.next:
-                current = current.next
+            current = self.tail
             current.next = newNode
             newNode.prev = current
+            self.tail = newNode
         else:
             self.head = newNode
+            self.tail = newNode
         self.count += 1
 
     def insert_front(self, data):
@@ -74,6 +82,7 @@ class LinkedList:
             # If the list has one element and it matches.
             if self.count == 1 and current.value == data:
                 self.head = None
+                self.tail = None
                 self.count -= 1
             # If the value is the first item in the list
             elif current.value == data:
@@ -89,6 +98,7 @@ class LinkedList:
                             next.next.prev = current
                         else:
                             current.next = None  # If deleting the last element in the list
+                            self.tail = current
                         self.count -= 1
                     current = next
                     next = next.next
@@ -119,6 +129,7 @@ class LinkedList:
                         self.count -= 1
                     else:
                         current.next = None
+                        self.tail = current
                         self.count -= 1
             else:
                 print(f'Index provided is outside of the boundary of the list. It contains {self.count} elements')
@@ -126,30 +137,40 @@ class LinkedList:
             print('The list is empty. No values were deleted')
 
     def pop(self):
-        if self.count >= 1:
-            current = self.head
-            while current.next:
-                current = current.next
-
+        current = self.tail
+        if self.count > 1:
             val = current.value
             prev = current.prev
             prev.next = None
+            self.tail = prev
+            self.count -= 1
+            return val
+        elif self.count == 1:
+            val = current.value
+            self.tail = None
+            self.head = None
             self.count -= 1
             return val
         else:
             return 'The list is empty. There are no values to pop'
 
     def dequeue(self):
-        if self.count >= 1:
-            current = self.head
+        current = self.head
+        if self.count > 1:
             val = current.value
             current = current.next
             self.head = current
             current.prev = None
             self.count -= 1
             return val
+        elif self.count == 1:
+            val = current.value
+            self.head = None
+            self.tail = None
+            self.count -= 1
+            return val
         else:
-            return 'The list is empty. There are no values to dequeue'
+            print('The list is empty. There are no values to dequeue')
 
     def find_index(self, value):
         if self.count >= 1:
@@ -223,6 +244,40 @@ class LinkedList:
         elif self.count == 0:
             print('The list is empty')
 
+    # Flattening multi-level linked lists
+    def nest_list(self, value, list):
+        if self.count >= 1:
+            current = self.head
+            while current:
+                if current.value == value:
+                    break
+                current = current.next
+            current.child = list
+
+        else:
+            return 'The list is empty'
+
+    def flatten(self):
+        if self.count >= 1:
+            current = self.head
+
+            while current:
+                if current.child:
+                    next = current.next
+                    child_head = current.child.head
+                    child_tail = current.child.tail
+                    # Merge lists by connecting ends
+                    current.next = child_head
+                    child_head.prev = current
+                    child_tail.next = next
+                    next.prev = child_tail
+                    # Once list is merged in set child to None
+                    current.child = None
+
+                current = current.next
+        else:
+            return 'The list is empty'
+
 
 __name__ = "__main__"
 
@@ -234,8 +289,25 @@ list.insert_back(3)
 list.insert_back(4)
 list.insert_back(5)
 list.insert_back(6)
-list.insert_back(7)
+
+sub1 = LinkedList()
+sub1.insert_back(7)
+sub1.insert_back(8)
+sub1.insert_back(9)
+
+sub2 = LinkedList()
+sub2.insert_back(10)
+sub2.insert_back(11)
+
+sub3 = LinkedList()
+sub3.insert_back(12)
+sub3.insert_back(13)
+
+list.nest_list(2, sub1)
+sub1.nest_list(8, sub2)
+list.nest_list(5, sub3)
+
 list.print()
 print()
-list.m_n_reversal(0, 6)
+list.flatten()
 list.print()
