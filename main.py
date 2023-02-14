@@ -19,13 +19,22 @@ class LinkedList:
         current = self.head
         while current:
             print(current.value)
-            # if current.child is not None:
-            #     next = current.child.head
-            #     while next:
-            #         print(next.value)
-            #         next = next.next
-
+            # Code to print list while it has nested items
+            if current.child is not None:
+                next = current.child.head
+                self.print_recursive(next)
             current = current.next
+
+    def print_recursive(self, node):
+        if node is not None:
+            while node:
+                print(node.value)
+                if node.child is not None:
+                    new_node = node.child.head
+                    self.print_recursive(new_node)
+                node = node.next
+        else:
+            return
 
     def insert_back(self, data):
         '''Inserts elements at the end of the linked list'''
@@ -250,10 +259,9 @@ class LinkedList:
             current = self.head
             while current:
                 if current.value == value:
+                    current.child = list
                     break
                 current = current.next
-            current.child = list
-
         else:
             return 'The list is empty'
 
@@ -263,16 +271,23 @@ class LinkedList:
 
             while current:
                 if current.child:
-                    next = current.next
                     child_head = current.child.head
                     child_tail = current.child.tail
-                    # Merge lists by connecting ends
-                    current.next = child_head
-                    child_head.prev = current
-                    child_tail.next = next
-                    next.prev = child_tail
-                    # Once list is merged in set child to None
-                    current.child = None
+
+                    if current.next:
+                        next = current.next
+                        # Merge lists by connecting ends
+                        current.next = child_head
+                        child_head.prev = current
+                        child_tail.next = next
+                        next.prev = child_tail
+                        # Once list is merged in set child to None
+                        current.child = None
+                    else:  # If at the end of the list
+                        current.next = child_head
+                        child_head.prev = current
+                        self.tail = child_tail
+                        current.child = None
 
                 current = current.next
         else:
